@@ -113,7 +113,7 @@ const submit = async () => {
   formData.append('file', selectedFile.value)
 
   try {
-    const response: any = await $api('admin/provider-offers/bulk-import', {
+    const response: any = await $api('v1/admin/provider-offers/bulk-import', {
       method: 'POST',
       body: formData,
     })
