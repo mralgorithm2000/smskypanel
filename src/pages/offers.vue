@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import OfferFormDialog from '@/views/offers/OfferFormDialog.vue'
+import BulkOfferImportDialog from '@/views/offers/BulkOfferImportDialog.vue'
 import type { Offer, SelectOption } from '@/views/offers/OfferFormDialog.vue'
 
 definePage({
@@ -31,6 +32,7 @@ const paginationTo = ref(0)
 const isLoading = ref(false)
 const listError = ref('')
 const isFormDialogVisible = ref(false)
+const isBulkImportDialogVisible = ref(false)
 const offerToEdit = ref<Offer | null>(null)
 const isDeleteDialogVisible = ref(false)
 const offerToDelete = ref<Offer | null>(null)
@@ -594,6 +596,15 @@ const deleteOffer = async () => {
         >
           Add Offer
         </VBtn>
+        <VBtn
+          v-if="canCreate && !isReorderMode"
+          color="secondary"
+          variant="tonal"
+          prepend-icon="tabler-file-import"
+          @click="isBulkImportDialogVisible = true"
+        >
+          Import Bulk Offers
+        </VBtn>
       </VCardText>
 
       <VAlert
@@ -820,6 +831,11 @@ const deleteOffer = async () => {
       :countries="countryOptions"
       :services="serviceOptions"
       @saved="showSuccess"
+    />
+
+    <BulkOfferImportDialog
+      v-model:is-dialog-visible="isBulkImportDialogVisible"
+      @imported="showSuccess"
     />
 
     <DeleteConfirmationDialog
