@@ -55,12 +55,16 @@ const loadServices = async () => {
     const records = payload.services ?? payload.data?.services ?? []
 
     services.value = records
-      .filter((service: any) => Number.isInteger(Number(service.id)))
-      .map((service: any) => ({
-        title: service.name ?? service.title ?? String(service.id),
-        value: Number(service.id),
-        id: Number(service.id),
-      }))
+      .filter((service: any) => Number.isInteger(Number(service.value ?? service.id)))
+      .map((service: any) => {
+        const id = Number(service.value ?? service.id)
+
+        return {
+          title: service.title ?? service.name ?? String(id),
+          value: id,
+          id,
+        }
+      })
   }
   catch (error: any) {
     const data = error?.data ?? error?.response?._data
