@@ -15,7 +15,7 @@ const emit = defineEmits<{
 }>()
 
 const services = ref<ServiceOption[]>([])
-const selectedServiceId = ref<number | string | null>(null)
+const selectedServiceId = ref<number | null>(null)
 const selectedFile = ref<File | null>(null)
 const isLoadingServices = ref(false)
 const isUploading = ref(false)
@@ -54,11 +54,13 @@ const loadServices = async () => {
     const payload = response.data ?? response
     const records = payload.services ?? payload.data?.services ?? []
 
-    services.value = records.map((service: any) => ({
-      title: service.name ?? service.title ?? String(service.id),
-      value: service.id,
-      id: service.id,
-    }))
+    services.value = records
+      .filter((service: any) => Number.isInteger(Number(service.id)))
+      .map((service: any) => ({
+        title: service.name ?? service.title ?? String(service.id),
+        value: Number(service.id),
+        id: Number(service.id),
+      }))
   }
   catch (error: any) {
     const data = error?.data ?? error?.response?._data
@@ -143,7 +145,7 @@ const submit = async () => {
 
   const formData = new FormData()
 
-  formData.append('service_id', String(selectedServiceId.value))
+  formData.append('service_id', String(Number(selectedServiceId.value)))
   formData.append('file', selectedFile.value)
 
   try {
