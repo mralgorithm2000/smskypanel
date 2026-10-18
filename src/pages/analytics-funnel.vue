@@ -81,7 +81,7 @@ const hasData = computed(() => mainStages.value.length > 0
   || !!payload.value.purchase_attempts
   || !!payload.value.activation_outcomes
   || !!payload.value.platform_comparison
-  || !!payload.value.payments)
+  || !!payload.value.payments)  
 
 const summary = computed(() => [
   { label: t('analyticsFunnel.startedCustomers'), value: mainStages.value[0]?.count, icon: 'tabler-player-play', color: 'primary' },
